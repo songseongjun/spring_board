@@ -1,4 +1,4 @@
-package com.junlevelup.board.dto;
+package com.junlevelup.board.domain.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -29,6 +29,7 @@ public class PageRequestDTO {
   public Pageable getPageable(Sort sort) {
     return PageRequest.of(page-1, size, sort);
   }
+
 
   public String getQs(){
     UriComponentsBuilder builder = UriComponentsBuilder.fromPath("");

@@ -1,7 +1,7 @@
-package com.junlevelup.board.projection.dto;
+package com.junlevelup.board.domain.projection.dto;
 
-import com.junlevelup.board.entity.Board;
-import com.junlevelup.board.entity.Member;
+import com.junlevelup.board.domain.entity.Board;
+import com.junlevelup.board.domain.entity.Member;
 import lombok.Getter;
 
 

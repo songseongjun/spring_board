@@ -1,4 +1,4 @@
-package com.junlevelup.board.dto;
+package com.junlevelup.board.domain.dto;
 
 import lombok.Data;
 import org.springframework.data.domain.Page;

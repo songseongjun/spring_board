@@ -1,4 +1,4 @@
-package com.junlevelup.board.entity;
+package com.junlevelup.board.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

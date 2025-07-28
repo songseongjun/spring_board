@@ -39,3 +39,7 @@ out/
 /src/main/resources/secret
 /src/main/resources/secret/aws_s3.yml
 /src/main/resources/secret/db.yml
+
+
+## query dsl generated
+**/generated

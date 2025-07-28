@@ -1,15 +1,14 @@
 package com.junlevelup.board.service;
 
 
-import com.junlevelup.board.dto.BoardDTO;
-import com.junlevelup.board.dto.PageRequestDTO;
-import com.junlevelup.board.dto.PageResponseDTO;
-import com.junlevelup.board.entity.Board;
-import com.junlevelup.board.projection.dto.BoardWithReplyCount;
+import com.junlevelup.board.domain.dto.BoardDTO;
+import com.junlevelup.board.domain.dto.PageRequestDTO;
+import com.junlevelup.board.domain.dto.PageResponseDTO;
+import com.junlevelup.board.domain.entity.Board;
+import com.junlevelup.board.domain.projection.dto.BoardWithReplyCount;
 import com.junlevelup.board.repository.BoardRepository;
 import com.junlevelup.board.repository.ReplyRepository;
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,7 @@ public class BoardServiceImpl implements BoardService {
   @Override
   public PageResponseDTO<BoardDTO, BoardWithReplyCount> getList(PageRequestDTO pageRequestDTO) {
     return new PageResponseDTO<>(
-            boardRepository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by(Sort.Direction.DESC,"bno")))
+            boardRepository.searchPage(pageRequestDTO.getType(), pageRequestDTO.getKeyword(), pageRequestDTO.getPageable(Sort.by(Sort.Direction.DESC,"bno")))
     ,this::projectionTodTo);
   }
 

@@ -1,10 +1,9 @@
 package com.junlevelup.board.repository;
 
 
-import com.junlevelup.board.entity.Board;
-import com.junlevelup.board.entity.Reply;
+import com.junlevelup.board.domain.entity.Board;
+import com.junlevelup.board.domain.entity.Reply;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,4 +49,15 @@ private BoardRepository boardRepository;
     log.info(reply.getBoard());
     log.info(reply.getBoard().getWriter());
   }
-}
+
+  @Test
+
+  public void testFindByBoard_Bno(){
+    repository.findByBoard_Bno(1L).forEach(log::info);
+  }
+
+  @Test
+  public void testFindByBoard(){
+    repository.findByBoard(Board.builder().bno(1L).build()).forEach(log::info);
+    }
+  }

@@ -1,4 +1,4 @@
-package com.junlevelup.board.dto;
+package com.junlevelup.board.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,9 +1,9 @@
 package com.junlevelup.board.repository;
 
 
-import com.junlevelup.board.projection.dto.*;
-import com.junlevelup.board.entity.Board;
-import com.junlevelup.board.entity.Member;
+import com.junlevelup.board.domain.projection.dto.*;
+import com.junlevelup.board.domain.entity.Board;
+import com.junlevelup.board.domain.entity.Member;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -92,6 +92,20 @@ public class BoardRepositoryTest {
   public void  testGetBoardWithReplyCount() {
       Page<BoardWithReplyCount> result = repository.getBoardWithReplyCount(PageRequest.of(0, 10,Sort.by(Sort.Direction.DESC,"bno")));
       result.getContent().stream().forEach(row -> log.info("{}",row));
+    }
 
+    @Test
+  public void testSearch1(){
+    repository.search1();
+    }
+
+    @Test
+  public void testSearchPage(){
+   Page<BoardWithReplyCount> bwrc = repository.searchPage("tcw","title",PageRequest.of(2, 5,
+            Sort.by(Sort.Direction.DESC,"bno").and(Sort.by(Sort.Direction.ASC,"title"))));
+
+  log.info(bwrc.getTotalPages());
+  log.info(bwrc.getTotalElements());
+  bwrc.getContent().forEach(log::info);
     }
   }

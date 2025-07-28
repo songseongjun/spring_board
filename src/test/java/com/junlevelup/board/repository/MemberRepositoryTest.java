@@ -1,13 +1,12 @@
 package com.junlevelup.board.repository;
 
 
-import com.junlevelup.board.entity.Member;
+import com.junlevelup.board.domain.entity.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.InputStream;
 import java.util.stream.IntStream;
 
 @SpringBootTest

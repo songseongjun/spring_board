@@ -2,131 +2,204 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/index :: setContent(~{this::content})}">
   <th:block th:fragment="content">
-    <h1>Guestbook Read Page</h1>
+    <h1>Board Read Page</h1>
 
     <div class="form-group">
       <label for="bno">bno</label>
-      <!--gno → bno -->
-      <input type="text" class="form-control" name="bno" id="bno" th:value="${dto.bno}" readonly>
+      <input type="text" class="form-control" name="bno" placeholder="bno" id="bno" th:value="${dto.bno}" readonly="readonly">
     </div>
     <div class="form-group">
       <label for="title">Title</label>
-      <input type="text" class="form-control" name="title" id="title" th:value="${dto.title}" readonly>
+      <input type="text" class="form-control" name="title" placeholder="title" id="title" th:value="${dto.title}" readonly="readonly">
     </div>
     <div class="form-group">
       <label>Content</label>
-      <textarea class="form-control" name="content" readonly>[[${dto.content}]]</textarea>
+      <textarea class="form-control" name="content" placeholder="Content"  readonly="readonly">[[${dto.content}]]</textarea>
     </div>
     <div class="form-group">
       <label>Writer</label>
-      <input type="text" class="form-control" name="writerName" th:value="${dto.writerName}" readonly>
+      <input type="text" class="form-control" name="writer" placeholder="Writer" th:value="${dto.writerName}" readonly="readonly">
     </div>
     <div class="form-group">
       <label>regDate</label>
-      <input type="text" class="form-control" name="regDate"
-             th:value="${#temporals.format(dto.regDate,'yyyy/MM/dd')}" readonly>
-    </div>
-    <!-- th:if{...} → th:if="..." -->
-    <div class="form-group" th:if="${dto.modDate != null}">
-      <label>modDate</label>
-      <input type="text" class="form-control" name="modDate"
-             th:value="${#temporals.format(dto.modDate,'yyyy/MM/dd')}" readonly>
+      <input type="text" class="form-control" name="regDate" placeholder="regDate" th:value="${#temporals.format(dto.regDate, 'yyy/MM/dd')}" readonly="readonly">
     </div>
 
-    <a th:href="@{/board/modify(page=${requestDto.page}, size=${requestDto.size}, bno=${dto.bno}, type=${requestDto.type}, keyword=${requestDto.keyword})}"
-       class="btn btn-primary mt-3">modify</a>
-    <a th:href="@{/board/list(page=${requestDto.page}, size=${requestDto.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}"
-       class="btn btn-primary">List</a>
+    <div class="form-group my-4">
+      <label>modDate</label>
+      <input type="text" class="form-control" name="modDate" placeholder="modDate" th:value="${#temporals.format(dto.modDate, 'yyy/MM/dd')}" readonly="readonly">
+    </div>
+    <a th:href="@{/board/modify(page = ${requestDto.page}, size = ${requestDto.size}, bno = ${dto.bno}, type = ${requestDto.type}, keyword = ${requestDto.keyword})}" class="btn btn-primary mt-3">modify</a>
+    <a th:href="@{/board/list(page = ${requestDto.page}, size = ${requestDto.size}, type = ${requestDto.type}, keyword = ${requestDto.keyword})}" class="btn btn-primary mt-3">List</a>
+
+    <div class="mt-4">
+      <h5><button class="badge bg-secondary addReply p-2 text-decoration-none text-white board-0">Add Reply</button></h5>
+      <h5><button class="badge bg-secondary replyCount p-2 text-decoration-none text-white  board-0">Reply Count [[${dto.replyCount}]]</button></h5>
+      <ul class="list-group replyList">
+
+      </ul>
+    </div>
   </th:block>
 </th:block>
 
-<script>
-  //전역변수로 counter 0
-  // 10 ** 3 =1000 이되는거다 뒤에0을붙혀주는것
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-  let counter = 0;
-  function callLocal(n, cb){
-    const add =10 ** n;
-    counter += add;
-    console.log(`[local] 10^${n} = ${add} -> counter : ${counter}`);
-    if (cb) cb();
-  }
-  function callAsync(n, cb){
-    const add =10 ** n;
-    const delay = Math.floor(Math.random() * 1000); // 0~ 999사이의 난수로나옴
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Reply</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
 
-    setTimeout(() => {
-    counter += add;
-    console.log(`[async] 10^${n} = ${add} -> counter : ${counter}, delay: ${delay}ms`);
-    if (cb)cb();
-    },delay);
-  }
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-group">
+          <input class="form-control" type="text" name="text" placeholder="replyText...">
+        </div>
+        <div class="form-group my-3">
+          <input class="form-control" type="text" name="text" placeholder="replyer...">
+        </div>
+          <input type="hidden" name="rno">
 
-  //callback
+      </div>
 
-  callAsync(0, () => {
-    callAsync(1, () => {
-      callAsync(2, () => {
-        callAsync(3, () => {
-          callAsync(4, () => {
-            callLocal(5, () => {
-              callLocal(6, () => {
-                callLocal(7, () => {
-                  callLocal(8, () => {
-                    callLocal(9, () => {
-                      console.log("내가 마지막!!")
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger " >Remove</button>
+        <button type="button" class="btn btn-warning " >Modify</button>
+        <button type="button" class="btn btn-primary replySave" >Save</button>
+        <button type="button" class="btn btn-outline-secondary replyClose" data-bs-dismiss="modal" >Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js"
+        integrity="sha512-FwNWaxyfy2XlEINoSnZh1JQ5TRRtGow0D6XcmAWmYCRgvqOUTnzCxPc9uF35u5ZEpirk1uhlPVA19tflhvnW1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/plugin/relativeTime.min.js"
+        integrity="sha512-MVzDPmm7QZ8PhEiqJXKz/zw2HJuv61waxb8XXuZMMs9b+an3LoqOqhOEt5Nq3LY1e4Ipbbd/e+AWgERdHlVgaA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/locale/ko.min.js"
+        integrity="sha512-ycjm4Ytoo3TvmzHEuGNgNJYSFHgsw/TkiPrGvXXkR6KARyzuEpwDbIfrvdf6DwXm+b1Y+fx6mo25tBr1Icg7Fw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script th:inline="javascript">
+  window.addEventListener("load", e => {
+    const myModal = new bootstrap.Modal(document.querySelector('.modal'))
+    // dayjs 전역설정
+    dayjs.extend(window.dayjs_plugin_relativeTime);
+    dayjs.locale('ko')
+
+    const bno = [[${dto.bno}]];
+
+    const listGroup = document.querySelector(".replyList");
+
+    const loadJSONData = () => {
+      fetch(`../replies/board/${bno}`)
+          .then(resp => resp.json()) // JSON으로 가져옴
+          .then(arr => {
+
+            document.querySelector(".replyCount").innerHTML = "Reply Count" + arr.length;
+            listGroup.innerHTML = arr.map(r => {
+              console.log(r)
+              return `
+                <li class="card list-group-item" data-rno="${r.rno}">
+                  <b>${r.rno}</b>
+                  <div class="card-body">
+                    <h5 class="card-title"> ${r.text}</h5>
+                    <h5 class="card-subtitle mb-2 text-muted">${r.replyer}</h5>
+                    <p class="card-text"> ${dayjs(r.regDate).fromNow()}</p>
+                  </div>
+                </li>
+              `;
+            }).join("")
+          })
+    };
+    document.querySelector(".replyCount").addEventListener("click", () => loadJSONData());
+
+    document.querySelector(".addReply").addEventListener("click", () => {
+
+
+      document.querySelectorAll(".modal input[type=text]").forEach(i => i.value = '');
+      [...document.querySelectorAll(".modal-footer button")]
+          .filter(b => {
+            b.classList.add('d-none');
+            return b.matches('.replyClose, .replySave')
+          })
+          .forEach(b => b.classList.remove('d-none'));
+      myModal.show();
     });
+
+    document.querySelector(".replySave").addEventListener("click", e => {
+      const reply = {bno}
+      console.log(reply);
+      e.target.closest(".modal").querySelectorAll("input[type=text]").forEach(i => reply[i.name] = i.value);
+      console.log(reply);
+
+      fetch("/replies", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(reply)
+      })
+          .then(resp => resp.json())
+          .then(data => {
+            alert(data + "번 글이 등록 되었습니다")
+            myModal.hide();
+            loadJSONData(e);
+          });
+    })
+
+
+
+
+    // 댓글 리스트 클릭 시 모달 열기
+    listGroup.addEventListener("click", e => {
+      const li = e.target.closest("li.card"); // 클릭한 댓글 찾기
+      if (!li) return;
+
+      const rno = li.dataset.rno;
+      const text = li.querySelector(".card-title").innerText;
+      const replyer = li.querySelector(".card-subtitle").innerText;
+
+      document.querySelector(".modal input[name=text]").value = text;
+      document.querySelector(".modal input[placeholder='replyer...']").value = replyer;
+      document.querySelector(".modal input[name=rno]").value = rno;
+
+      //
+      [...document.querySelectorAll(".modal-footer button")]
+          .forEach(b => b.classList.add('d-none'));
+      document.querySelector(".modal .btn-danger").classList.remove('d-none'); // Remove
+      document.querySelector(".modal .btn-warning").classList.remove('d-none'); // Modify
+      document.querySelector(".modal .replyClose").classList.remove('d-none');
+
+      myModal.show();
+    });
+
+// 댓글 삭제 이벤트
+    document.querySelector(".modal .btn-danger").addEventListener("click", () => {
+      const rno = document.querySelector(".modal input[name=rno]").value;
+
+
+
+      fetch(`../replies/board/${rno}`, {
+        method: "DELETE"
+      })
+
+          .then(resp => resp.text())
+          .then(result => {
+            alert(result + "댓글을삭제하시겠습니까")
+            myModal.hide();
+            loadJSONData(); // 삭제 후 댓글 목록 다시 로딩
+          });
+    });
+
   });
 
-      //이게 저위에 처럼 콜백해서 바뀔수있음 저위에처럼 되면 순서대로나옴
-  // callAsync(0);   랜덤 딜레이 후 실행 (순서 예측 X)
-  // callAsync(1);
-  // callAsync(2);
-  // callAsync(3);
-  // callAsync(4);
-  //
-  // callLocal(5);  // 즉시 실행
-  // callLocal(6);
-  // callLocal(7);
-  // callLocal(8);
-  // callLocal(9);
-
-  // $.ajax({
-  //   success: (date) => {
-  //     $.ajax({
-  //       success:(date) => {
-  //
-  //       }
-  //     })
-  //   }
-  // })
-  // $.ajax({
-  //   success: (data) => {
-  //   },
-  //   error: (error) => {
-  //   },
-  //   finally: (data) => {
-  //   }
-  // })
-  //     .done((data) => {
-  //
-  //     })
-  //     .fail(error => {
-  //
-  //     })
-  //     .always((data) => {
-  //
-  //     })
-  //     .done((data) => {
-  //     })
 
 </script>
 </html>

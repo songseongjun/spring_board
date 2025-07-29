@@ -1,6 +1,8 @@
 package com.junlevelup.board.controller;
 
 
+import com.junlevelup.board.domain.dto.ReplyDTO;
+import com.junlevelup.board.domain.entity.Reply;
 import com.junlevelup.board.repository.ReplyRepository;
 import com.junlevelup.board.service.ReplyService;
 import lombok.Data;
@@ -8,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Log4j2
@@ -26,4 +25,15 @@ public class ReplyController {
   public ResponseEntity<?> getList(@PathVariable("bno") Long bno){
     return ResponseEntity.ok(replyService.getList(bno));
   }
+  @PostMapping("")
+  public ResponseEntity<Long> createReply(@RequestBody ReplyDTO dto){
+    log.info(dto);
+    return ResponseEntity.ok(replyService.register(dto));
+  }
+  @DeleteMapping("board/{rno}")
+  public ResponseEntity<?> remove(@PathVariable("rno") Long rno) {
+    replyService.remove(rno);
+    return ResponseEntity.ok("");
+  }
 }
+
